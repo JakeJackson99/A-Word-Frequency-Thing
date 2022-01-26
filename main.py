@@ -25,6 +25,7 @@ words = {
 }
 """
 import string
+from unittest import result
 
 
 def sentence_cleaner(text):
@@ -32,39 +33,60 @@ def sentence_cleaner(text):
         text = text.replace(char, "")
     return text.lower().split()
 
-def main():
+
+def get_data():
     results = {}
 
     for i in range(1, 7):
         with open(f"test_docs/doc{i}.txt") as file:
             text = file.read().split(".")
+
             for sentence in text:
                 if sentence == "":
                     continue
                 sentence = sentence.strip()
                 words = sentence_cleaner(sentence)
+
                 for word in words:
                     if word not in results:
                         results.update({
-                            word: {"counter": 0,
-                                   "documents": [], "sentences": []}
-                        })
+                            word: {"counter": 0, "documents": [], "sentences": []}})
 
                     results[word]["counter"] += 1
                     if f"doc{i}.txt" not in results[word]["documents"]:
                         results[word]["documents"].append(f"doc{i}.txt")
                     if sentence not in results[word]["sentences"]:
                         results[word]["sentences"].append(sentence)
+    return results
+
+
+def filter_data(data, freq, word_size):
+    """Filters the data by a minimum frequency and size of the word"""
+    results = {}
+
+    for key, value in data.items():
+        if value["counter"] > freq and len(key) > word_size:
+            results.update({key: value})
+
+    return results
+
+
+def table_results(results):
+    print("{:<12} {:<10} {:<60} {:<20}".format(
+        "Word", "Frequency", "Documents", "Sentences"))
 
     for key, value in results.items():
-        if 5 < value["counter"] < 8:
-            print(key, ' -> ', value)
+        freq = value["counter"]
+        documents = ", ".join(value["documents"])
+        sentences = value["sentences"][0]
+        print("{:<12} {:<10} {:<60} {:<20}".format(
+            key, freq, documents, f"{sentences[0:50]}..."))
+
+
+def main():
+    results = filter_data(get_data(), 10, 8)
+    table_results(results)
 
 
 if __name__ == "__main__":
     main()
-
-    # TESTS
-    # for key, value in results.items():
-    #     if value["counter"] > 5:
-    #         print(key, ' -> ', value)
