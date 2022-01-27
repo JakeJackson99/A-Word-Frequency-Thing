@@ -1,76 +1,62 @@
-"""
-TODO
-1) Read each file
-2) For each file, split the text up into sentences (i.e. .split("."))
-    2.1) Before reading the split text, remove the punctuation and lower the text's case
-3) Identify "interesting" words (decide what that means later)
-4) If the word is in the dictionary, increment the key's "counter" value; else, add it to the dict
-   along with the file name it occurs in and the sentence itself WITH the punction.
-
-NOTE
-- Only add a word's location if it hasn't already been added (cannot use sets in dictionaries)
-*- Stripping sentences of their punctuation also strips any necessary apostrophes in words
-    - Maybe keep track of the word's index in the sentence BEFORE stripping away the punctuatio
-      so it can be added into the 'words' dictionary
-- For printing the values, if not being done in the browser, create a table following this guide:
-  https://blog.softhints.com/python-print-pretty-table-list/
-
-Format:
-words = {
-    word: {
-        counter: int,
-        files: [str],
-        sentences: [str]
-    }
-}
-"""
+from copyreg import constructor
 import string
+import os
 
 
 def sentence_cleaner(text):
+    """Cleans a given sentence"""
+
     for char in string.punctuation:
         text = text.replace(char, "")
     return text.lower().split()
 
 
 def get_data():
+    """Reads the files and adds the data to a dictionary"""
+
     results = {}
-
-    for i in range(1, 7):
-        with open(f"test_docs/doc{i}.txt") as file:
-            text = file.read().split(".")
-
-            for sentence in text:
-                if sentence == "":
-                    continue
-                sentence = sentence.strip()
-                words = sentence_cleaner(sentence)
-
-                for word in words:
-                    if word not in results:
-                        results.update({
-                            word: {"counter": 0, "documents": [], "sentences": []}})
-
-                    results[word]["counter"] += 1
-                    if f"doc{i}.txt" not in results[word]["documents"]:
-                        results[word]["documents"].append(f"doc{i}.txt")
-                    if sentence not in results[word]["sentences"]:
-                        results[word]["sentences"].append(sentence)
+    try:
+        for filename in os.listdir("test_docss"):
+            with open(os.path.join("test_docs", filename)) as file:
+                text = file.read().split(".")
+                for sentence in text:
+                    if sentence == "":
+                        continue
+                    sentence = sentence.strip()
+                    words = sentence_cleaner(sentence)
+                    for word in words:
+                        if word not in results:
+                            results.update({
+                                word: {"counter": 0, "documents": [], "sentences": []}})
+                        results[word]["counter"] += 1
+                        if filename not in results[word]["documents"]:
+                            results[word]["documents"].append(filename)
+                        if sentence not in results[word]["sentences"]:
+                            results[word]["sentences"].append(sentence)
+    except FileNotFoundError as e:
+        print(e)
     return results
 
 
 def filter_data(data, freq, word_size):
-    """Filters the data by a minimum frequency and size of the word"""
-    results = {}
+    """Filters the data
 
+    Args:
+        data -- a dictionary of words
+        freq -- the minumum frequency for word
+        word_size -- the minimum size a word can be (partly to decide how "interesting" it is)
+    """
+
+    results = {}
     for key, value in data.items():
         if value["counter"] > freq and len(key) > word_size:
             results.update({key: value})
-
     return results
 
 
 def table_results(results):
+    """Displays the results in a table via the CLI"""
+
     print("{:<12} {:<10} {:<60} {:<20}".format(
         "Word", "Frequency", "Documents", "Sentences"))
 
