@@ -25,7 +25,6 @@ words = {
 }
 """
 import string
-from unittest import result
 
 
 def sentence_cleaner(text):
@@ -83,10 +82,6 @@ def table_results(results):
             key, freq, documents, f"{sentences[0:50]}..."))
 
 
-def main():
+if __name__ == "__main__":
     results = filter_data(get_data(), 10, 8)
     table_results(results)
-
-
-if __name__ == "__main__":
-    main()
