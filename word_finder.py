@@ -16,7 +16,7 @@ def get_data():
 
     results = {}
     try:
-        for filename in os.listdir("test_docss"):
+        for filename in os.listdir("test_docs"):
             with open(os.path.join("test_docs", filename)) as file:
                 text = file.read().split(".")
                 for sentence in text:
