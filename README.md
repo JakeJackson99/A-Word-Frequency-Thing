@@ -1,23 +1,4 @@
 # A-Word-Frequency-Thing
-## Intro
-The program can be run via the command line, and a nice table is printed of the results. But since the size of the terminal is limited, a Flask server is available to serve the data to the browser so as to be printed in an even nicer table.
-
-### Running the program
-First, enter the `venv`:
-```
-. env/bin/activate
-```
-Run the program in the browser (recommended):
-```
-export FLASK_APP=app
-flask run 
-```
-Run the program in the CLI:
-```
-python word_finder.py
-```
-## Code walkthrough
-
 ### get_data() - the main algorithm
 1) It loops through each document in `test_docs`
 2) It splits the text up into sentences
