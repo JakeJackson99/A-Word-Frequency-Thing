@@ -22,8 +22,8 @@ python word_finder.py
 1) It loops through each document in `test_docs`
 2) It splits the text up into sentences
 3) For each split sentence, it checks that the text is not empty (it ignores it if so) before cleaning up each sentence
-3.1) see *sentence_data()* for more information
-3.2) Note: the a copy of each sentence has its whitespace removed, and they are stored separetly in `sentence` for later use when adding to the dictionary
+3.1 see *sentence_data()* for more information
+3.2 Note: the a copy of each sentence has its whitespace removed, and they are stored separetly in `sentence` for later use when adding to the dictionary
 4) Each word is then compared to the dictionary
 4.1 If the word does not exist in the dictionary, a new entry is made in the name of the word
 4.2 Each attribute in the entry is then updated accordingly: a counter, a list of locations the word exists in, and a list of sentences that the word is used in
